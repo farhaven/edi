@@ -132,8 +132,11 @@ class Manager(object):
         try:
             for tag in self.consumer_tags:
                 self.chan.basic_cancel(tag)
+        except KeyError:
+            # These happen on Python3, but don't seem to hurt
+            pass
         except:
-            log.error("Error in canceling consumers")
+            log.exception("Error in canceling consumers")
 
         if self.chan is not None:
             self.chan.close()
